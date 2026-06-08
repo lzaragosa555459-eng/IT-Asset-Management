@@ -1,16 +1,45 @@
-# __IT ASSET MANAGEMENT SYSTEM__
+# 🖥️ IT Asset Management System
 
-### Monitors equipments used by the emplyees.
+A web-based system for managing and tracking IT equipment used by employees.  
+It helps monitor assets such as laptops, monitors, and peripherals, including their assignment and status.
 
-##### stack used:
-###### Fontend
-* HTML
-* CSS
-* JavaScript
+---
 
-###### Backend
-* Node
-* Express
+## ⚙️ Tech Stack
 
-###### Database
-* SQlite
+### 🎨 Frontend
+- HTML  
+- CSS  
+- JavaScript (Vanilla)
+
+### 🛠️ Backend
+- Node.js  
+- Express.js  
+
+### 🗄️ Database
+- SQLite (file-based database)
+
+---
+
+## 📌 Features (Version 1)
+
+- 👨‍💼 Employee Management (CRUD)
+- 💻 Asset Management (CRUD)
+- 🔗 Assign assets to employees
+- 🔄 Return assets
+- 📊 Dashboard overview (basic stats)
+
+---
+
+## 🏗️ Project Structure
+
+```bash
+it-asset-management/
+│
+├── controllers/
+├── routes/
+├── views/
+├── config/
+├── database.db
+├── server.js
+└── package.json
