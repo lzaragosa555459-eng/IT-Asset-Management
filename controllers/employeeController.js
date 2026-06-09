@@ -1,7 +1,10 @@
-const path = require("path");
+const db = require("../config/database"); 
 
 exports.index = (req, res) => {
-    res.render("employee");
+    res.render("employee", {
+        title: "Employees",  
+        layout: "layouts/main"
+    });
 };
 
 exports.store = (req, res) => {
