@@ -6,12 +6,15 @@ const path = require("path");
 const employeeRoutes = require("./routes/employeeRoutes");
 const loginRoutes = require("./routes/loginRoutes");
 
-// serve static files (CSS, JS, images)
+// 1. middleware FIRST
+app.use(express.urlencoded({ extended: true }));
+
+// 2. static files
 app.use(express.static(path.join(__dirname, "public")));
 
-// routes
+// 3. routes
+app.use("/", loginRoutes);
 app.use("/employees", employeeRoutes);
-app.use("/login", loginRoutes);
 
 app.listen(3000, () => {
     console.log("Server running on http://localhost:3000");

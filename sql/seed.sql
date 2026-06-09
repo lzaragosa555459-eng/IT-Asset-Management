@@ -9,3 +9,7 @@ INSERT INTO assets
 VALUES
 ('LAP001', 'Dell Latitude', 'Laptop'),
 ('MON001', 'Dell Monitor', 'Monitor');
+
+
+INSERT INTO users (username, password)
+VALUES ('admin', '12345');
