@@ -15,6 +15,7 @@ It helps monitor assets such as laptops, monitors, and peripherals, including th
 ### 🛠️ Backend
 - Node.js  
 - Express.js  
+- EJS
 
 ### 🗄️ Database
 - SQLite (file-based database)
