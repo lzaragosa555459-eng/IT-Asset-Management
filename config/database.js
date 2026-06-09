@@ -38,6 +38,14 @@ db.serialize(() => {
                 REFERENCES assets(id)
         )
     `);
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE,
+            password TEXT NOT NULL
+);
+    `);
 });
 
 module.exports = db;

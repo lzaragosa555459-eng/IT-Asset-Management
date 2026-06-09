@@ -27,3 +27,9 @@ CREATE TABLE assignments (
     FOREIGN KEY(asset_id)
         REFERENCES assets(id)
 );
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE,
+    password TEXT NOT NULL
+);
