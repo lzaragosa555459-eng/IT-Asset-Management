@@ -1,9 +1,7 @@
 const path = require("path");
 
 exports.index = (req, res) => {
-    res.sendFile("employee.html", {
-        root: "./views"
-    });
+    res.render("employee");
 };
 
 exports.store = (req, res) => {
