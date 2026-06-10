@@ -44,3 +44,17 @@ it-asset-management/
 ├── database.db
 ├── server.js
 └── package.json
+
+
+
+## Goals:
+
+- ✅ Authentication working
+
+- ✅ Layouts fixed
+
+- ⏳ Complete CRUD for Employees, Assets, Assignments
+
+- ⏳ Dashboard with charts/stats
+
+- ⏳ Proper error handling
