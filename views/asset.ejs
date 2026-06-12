@@ -1,27 +1,218 @@
-<h1>Assets</h1>
+<div class="page-header">
+    <h1>Assets</h1>
+    <button class="btn-add" onclick="window.location.href='/assets/add'">
+        + Add New Asset
+    </button>
+</div>
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Asset Tag</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Brand</th>
-            <th>Status</th>
-        </tr>
-    </thead>
+<!-- Filter Bar -->
+<div class="filter-bar">
+    <input type="text" id="searchInput" class="filter-input" placeholder="🔍 Search by name, tag, or brand...">
+    <select id="statusFilter" class="filter-select">
+        <option value="">All Status</option>
+        <option value="available">Available</option>
+        <option value="assigned">Assigned</option>
+        <option value="maintenance">Maintenance</option>
+        <option value="retired">Retired</option>
+    </select>
+    <select id="categoryFilter" class="filter-select">
+        <option value="">All Categories</option>
+        <option value="laptop">Laptop</option>
+        <option value="desktop">Desktop</option>
+        <option value="monitor">Monitor</option>
+        <option value="printer">Printer</option>
+        <option value="network">Network</option>
+    </select>
+</div>
 
-    <tbody>
-        <% assets.forEach(asset => { %>
+<!-- Stats Summary -->
+<div class="stats-summary" id="statsSummary"></div>
+
+<!-- Desktop Table View -->
+<div class="table-container">
+    <table class="modern-table" id="assetsTable">
+        <thead>
             <tr>
-                <td><%= asset.id %></td>
-                <td><%= asset.asset_tag %></td>
-                <td><%= asset.name %></td>
-                <td><%= asset.category %></td>
-                <td><%= asset.brand %></td>
-                <td><%= asset.status %></td>
+                <th>ID</th>
+                <th>Asset Tag</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Brand</th>
+                <th>Status</th>
+                <th>Actions</th>
             </tr>
-        <% }) %>
-    </tbody>
-</table>
+        </thead>
+        <tbody id="assetsTableBody">
+            <% if (assets && assets.length > 0) { %>
+                <% assets.forEach(asset => { %>
+                    <tr data-asset='<%= JSON.stringify(asset) %>'>
+                        <td><%= asset.id %></td>
+                        <td><%= asset.asset_tag %></td>
+                        <td><%= asset.name %></td>
+                        <td><%= asset.category %></td>
+                        <td><%= asset.brand %></td>
+                        <td>
+                            <span class="status-badge status-<%= asset.status %>">
+                                <%= asset.status %>
+                            </span>
+                        </td>
+                        <td class="action-btns">
+                            <button class="btn-edit" onclick="editAsset(<%= asset.id %>)">Edit</button>
+                            <button class="btn-delete" onclick="deleteAsset(<%= asset.id %>)">Delete</button>
+                        </td>
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr>
+                    <td colspan="7" class="empty-state">
+                        <i>📦</i>
+                        No assets found. Click "Add New Asset" to get started.
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<!-- Mobile Card View -->
+<div class="assets-grid" id="assetsGrid"></div>
+
+<script>
+    // Store assets data for filtering
+    let allAssets = <%= JSON.stringify(assets) %>;
+    
+    // Function to update status badge class
+    function getStatusClass(status) {
+        const statusMap = {
+            'available': 'status-available',
+            'assigned': 'status-assigned',
+            'maintenance': 'status-maintenance',
+            'retired': 'status-retired'
+        };
+        return statusMap[status] || 'status-available';
+    }
+    
+    // Render both table and grid views
+    function renderAssets(filteredAssets) {
+        const tableBody = document.getElementById('assetsTableBody');
+        const gridContainer = document.getElementById('assetsGrid');
+        const statsSummary = document.getElementById('statsSummary');
+        
+        // Update stats
+        const total = filteredAssets.length;
+        const available = filteredAssets.filter(a => a.status === 'available').length;
+        const assigned = filteredAssets.filter(a => a.status === 'assigned').length;
+        const maintenance = filteredAssets.filter(a => a.status === 'maintenance').length;
+        
+        statsSummary.innerHTML = `
+            <span class="stat-pill">📊 Total: <strong>${total}</strong></span>
+            <span class="stat-pill">✅ Available: <strong>${available}</strong></span>
+            <span class="stat-pill">🔧 Assigned: <strong>${assigned}</strong></span>
+            <span class="stat-pill">⚠️ Maintenance: <strong>${maintenance}</strong></span>
+        `;
+        
+        if (filteredAssets.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty-state">
+                        <i>🔍</i>
+                        No assets match your filters.
+                    </td>
+                </tr>
+            `;
+            gridContainer.innerHTML = `
+                <div class="empty-state">
+                    <i>🔍</i>
+                    No assets match your filters.
+                </div>
+            `;
+            return;
+        }
+        
+        // Render table
+        tableBody.innerHTML = filteredAssets.map(asset => `
+            <tr>
+                <td>${asset.id}</td>
+                <td>${asset.asset_tag}</td>
+                <td>${asset.name}</td>
+                <td>${asset.category}</td>
+                <td>${asset.brand}</td>
+                <td><span class="status-badge ${getStatusClass(asset.status)}">${asset.status}</span></td>
+                <td class="action-btns">
+                    <button class="btn-edit" onclick="editAsset(${asset.id})">Edit</button>
+                    <button class="btn-delete" onclick="deleteAsset(${asset.id})">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+        
+        // Render mobile cards
+        gridContainer.innerHTML = filteredAssets.map(asset => `
+            <div class="asset-card">
+                <div class="asset-card-header">
+                    <span class="asset-name">${asset.name}</span>
+                    <span class="asset-tag">${asset.asset_tag}</span>
+                </div>
+                <div class="asset-detail">
+                    <span class="asset-detail-label">ID:</span>
+                    <span class="asset-detail-value">${asset.id}</span>
+                </div>
+                <div class="asset-detail">
+                    <span class="asset-detail-label">Category:</span>
+                    <span class="asset-detail-value">${asset.category}</span>
+                </div>
+                <div class="asset-detail">
+                    <span class="asset-detail-label">Brand:</span>
+                    <span class="asset-detail-value">${asset.brand}</span>
+                </div>
+                <div class="asset-detail">
+                    <span class="asset-detail-label">Status:</span>
+                    <span class="status-badge ${getStatusClass(asset.status)}">${asset.status}</span>
+                </div>
+                <div class="action-btns" style="margin-top: 0.75rem;">
+                    <button class="btn-edit" onclick="editAsset(${asset.id})">Edit</button>
+                    <button class="btn-delete" onclick="deleteAsset(${asset.id})">Delete</button>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    // Filter function
+    function filterAssets() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const statusFilter = document.getElementById('statusFilter').value;
+        const categoryFilter = document.getElementById('categoryFilter').value;
+        
+        const filtered = allAssets.filter(asset => {
+            const matchesSearch = searchTerm === '' || 
+                asset.name.toLowerCase().includes(searchTerm) ||
+                asset.asset_tag.toLowerCase().includes(searchTerm) ||
+                (asset.brand && asset.brand.toLowerCase().includes(searchTerm));
+            
+            const matchesStatus = statusFilter === '' || asset.status === statusFilter;
+            const matchesCategory = categoryFilter === '' || asset.category === categoryFilter;
+            
+            return matchesSearch && matchesStatus && matchesCategory;
+        });
+        
+        renderAssets(filtered);
+    }
+    
+    // Event listeners for filters
+    document.getElementById('searchInput').addEventListener('input', filterAssets);
+    document.getElementById('statusFilter').addEventListener('change', filterAssets);
+    document.getElementById('categoryFilter').addEventListener('change', filterAssets);
+    
+    // Edit and Delete functions
+    function editAsset(id) {
+        window.location.href = `/assets/edit/${id}`;
+    }
+    
+    function deleteAsset(id) {
+        if (confirm('Are you sure you want to delete this asset?')) {
+            window.location.href = `/assets/delete/${id}`;
+        }
+    }
+    
+    // Initial render
+    renderAssets(allAssets);
+</script>
