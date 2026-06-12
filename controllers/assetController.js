@@ -9,7 +9,7 @@ exports.index = (req, res) => {
             console.error(err);
             return res.status(500).send("DB Error");
         }
-
+        
         res.render("asset", {
             title: "Assets",
             layout: "layouts/main",

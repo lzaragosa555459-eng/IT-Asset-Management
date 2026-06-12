@@ -1,1 +1,140 @@
-<h1>Assignments</h1>
+<div class="assignments-layout">
+    <!-- Assignment Form Section -->
+    <div class="assign-form-section">
+        <div class="form-card">
+            <h2>
+                <span>📋</span> Assign Asset
+            </h2>
+            
+            <form action="/assignments/store" method="POST">
+                <div class="form-group">
+                    <label>👤 Select Employee</label>
+                    <select name="employee_id" required>
+                        <option value="">-- Choose Employee --</option>
+                        <% employees.forEach(employee => { %>
+                            <option value="<%= employee.id %>">
+                                <%= employee.name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>💻 Select Asset</label>
+                    <select name="asset_id" required>
+                        <option value="">-- Choose Asset --</option>
+                        <% assets.forEach(asset => { %>
+                            <option value="<%= asset.id %>">
+                                <%= asset.asset_tag %> - <%= asset.name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    ✓ Assign Asset
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Assignments Table Section -->
+    <div class="assign-table-section">
+        <div class="form-card">
+            <h2>
+                <span>📊</span> Current Assignments
+            </h2>
+            
+            <div class="table-container">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Employee</th>
+                            <th>Asset</th>
+                            <th>Assigned Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (assignments && assignments.length > 0) { %>
+                            <% assignments.forEach(assign => { %>
+                                <tr>
+                                    <td><%= assign.id %></td>
+                                    <td><%= assign.employee_name %></td>
+                                    <td><%= assign.asset_name %></td>
+                                    <td><%= assign.assigned_date %></td>
+                                    <td>
+                                        <% if (assign.returned_date) { %>
+                                            <span class="returned-badge">✓ Returned</span>
+                                        <% } else { %>
+                                            <span class="not-returned-badge">⚡ Active</span>
+                                        <% } %>
+                                    </td>
+                                    <td class="action-btns">
+                                        <% if (!assign.returned_date) { %>
+                                            <button class="btn-return" onclick="returnAsset(<%= assign.id %>)">
+                                                ↩ Return
+                                            </button>
+                                        <% } else { %>
+                                            <span style="color: #9ca3af; font-size: 0.7rem;">Completed</span>
+                                        <% } %>
+                                    </td>
+                                </table>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="6" class="empty-assignments">
+                                    <i>📭</i>
+                                    No assignments found.
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to handle asset return
+    function returnAsset(assignmentId) {
+        if (confirm('Mark this asset as returned?')) {
+            // Create a form to POST the return request
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/assignments/return/${assignmentId}`;
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+    
+    // Optional: Add form validation before submit
+    const assignForm = document.querySelector('form[action="/assignments/store"]');
+    if (assignForm) {
+        assignForm.addEventListener('submit', function(e) {
+            const employeeSelect = this.querySelector('[name="employee_id"]');
+            const assetSelect = this.querySelector('[name="asset_id"]');
+            
+            if (!employeeSelect.value || !assetSelect.value) {
+                e.preventDefault();
+                alert('Please select both an employee and an asset.');
+            }
+        });
+    }
+</script>
+
+<style>
+    /* Additional inline styles for the assignments page specific elements */
+    .form-card select option {
+        padding: 0.5rem;
+    }
+    
+    /* Date formatting hint */
+    .modern-table td:nth-child(4) {
+        font-family: monospace;
+        font-size: 0.85rem;
+    }
+</style>
