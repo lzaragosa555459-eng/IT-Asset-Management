@@ -1,21 +1,167 @@
-<div class="bg-dark text-white p-3" style="width: 250px; min-height: 100vh;">
-    <h3 class="text-center">IT Asset Management</h3>
-    <hr>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<div class="bg-dark text-white p-3" style="width: 280px; min-height: 100vh; position: sticky; top: 0;">
+    <!-- Logo/Brand Section -->
+    <div class="text-center mb-4">
+        <div class="sidebar-logo">
+            <i class="fas fa-chart-line fa-2x mb-2"></i>
+            <h4 class="mb-0">IT Asset Mgmt</h4>
+            <small class="text-muted">System v1.0</small>
+        </div>
+    </div>
+    
+    <hr class="my-3">
+    
+    <!-- Navigation Menu -->
     <ul class="nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link text-white" href="/dashboard">Dashboard</a>
+        <li class="nav-item mb-2">
+            <a class="nav-link text-white sidebar-link" href="/dashboard">
+                <i class="fas fa-tachometer-alt me-3"></i>
+                <span>Dashboard</span>
+            </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-white" href="/employees">Employees</a>
+        <li class="nav-item mb-2">
+            <a class="nav-link text-white sidebar-link" href="/employees">
+                <i class="fas fa-users me-3"></i>
+                <span>Employees</span>
+            </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-white" href="/assets">Assets</a>
+        <li class="nav-item mb-2">
+            <a class="nav-link text-white sidebar-link" href="/assets">
+                <i class="fas fa-laptop me-3"></i>
+                <span>Assets</span>
+            </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-white" href="/assignments">Assignments</a>
+        <li class="nav-item mb-2">
+            <a class="nav-link text-white sidebar-link" href="/assignments">
+                <i class="fas fa-clipboard-list me-3"></i>
+                <span>Assignments</span>
+            </a>
         </li>
+    </ul>
+    
+    <hr class="my-3">
+    
+    <!-- Footer Section with Logout -->
+    <ul class="nav flex-column mt-auto">
         <li class="nav-item">
-            <a class="nav-link text-white" href="/">Logout</a>
+            <a class="nav-link text-white sidebar-link logout-link" href="/logout">
+                <i class="fas fa-sign-out-alt me-3"></i>
+                <span>Logout</span>
+            </a>
         </li>
     </ul>
 </div>
+
+<style>
+    /* Sidebar enhancements */
+    .sidebar-logo {
+        padding: 10px 0;
+    }
+    
+    .sidebar-logo i {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        padding: 12px;
+        border-radius: 50%;
+        font-size: 1.8rem;
+    }
+    
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+    
+    .sidebar-link i {
+        width: 24px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .sidebar-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateX(5px);
+        text-decoration: none;
+    }
+    
+    .sidebar-link.active {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+    }
+    
+    .logout-link {
+        color: #f87171 !important;
+    }
+    
+    .logout-link:hover {
+        background: rgba(248, 113, 113, 0.1);
+        color: #f87171 !important;
+    }
+    
+    /* Scrollbar styling for sidebar */
+    .bg-dark::-webkit-scrollbar {
+        width: 5px;
+    }
+    
+    .bg-dark::-webkit-scrollbar-track {
+        background: #2d3748;
+    }
+    
+    .bg-dark::-webkit-scrollbar-thumb {
+        background: #4a5568;
+        border-radius: 5px;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .bg-dark {
+            width: 80px !important;
+            transition: all 0.3s ease;
+        }
+        
+        .bg-dark:hover {
+            width: 280px !important;
+        }
+        
+        .bg-dark .sidebar-link span,
+        .bg-dark .sidebar-logo h4,
+        .bg-dark .sidebar-logo small,
+        .bg-dark hr {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .bg-dark:hover .sidebar-link span,
+        .bg-dark:hover .sidebar-logo h4,
+        .bg-dark:hover .sidebar-logo small,
+        .bg-dark:hover hr {
+            opacity: 1;
+        }
+        
+        .sidebar-link i {
+            margin: 0 auto !important;
+        }
+        
+        .bg-dark:hover .sidebar-link i {
+            margin: 0 !important;
+        }
+    }
+</style>
+
+<script>
+    // Add active class to current page link
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPath = window.location.pathname;
+        const links = document.querySelectorAll('.sidebar-link');
+        
+        links.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === currentPath) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
