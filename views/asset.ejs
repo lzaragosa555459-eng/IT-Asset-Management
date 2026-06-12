@@ -1,23 +1,27 @@
-<h1>Asset</h1>
-
+<h1>Assets</h1>
 
 <table>
-    <tr>
-        <thead>
-            <th>Employee Id</th>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Asset Tag</th>
             <th>Name</th>
-            <th>Department</th>
-            <th>Position</th>
-            <th>Email</th>
-        </thead>
-    </tr>
-    <tr>
-        <tbody>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tbody>
-    </tr>
+            <th>Category</th>
+            <th>Brand</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <% assets.forEach(asset => { %>
+            <tr>
+                <td><%= asset.id %></td>
+                <td><%= asset.asset_tag %></td>
+                <td><%= asset.name %></td>
+                <td><%= asset.category %></td>
+                <td><%= asset.brand %></td>
+                <td><%= asset.status %></td>
+            </tr>
+        <% }) %>
+    </tbody>
 </table>

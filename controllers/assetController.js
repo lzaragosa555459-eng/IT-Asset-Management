@@ -3,17 +3,19 @@ const db = new sqlite3.Database('./database.db');
 
 exports.index = (req, res) => {
 
-    const sql = "SELECT COUNT(*) AS total FROM assets";
+    db.all("SELECT * FROM assets", [], (err, assets) => {
 
-    db.all(sql, [], (err, row) => {
-        if(err){
+        if (err) {
             console.error(err);
             return res.status(500).send("DB Error");
         }
+
         res.render("asset", {
-            title: "Asset",
+            title: "Assets",
             layout: "layouts/main",
-            assetCount: row.total
+            assets: assets
         });
+
     });
+
 };

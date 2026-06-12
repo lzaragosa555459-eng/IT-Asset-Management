@@ -1,8 +1,8 @@
 INSERT INTO employees
-(employee_id, name, department)
+(employee_id, name, department, position, email)
 VALUES
-('EMP001', 'John Doe', 'IT'),
-('EMP002', 'Jane Smith', 'HR');
+('EMP001', 'John Doe', 'IT', 'Developer', 'john.doe@example.com'),
+('EMP002', 'Jane Smith', 'HR', 'HR Manager', 'jane.smith@example.com');
 
 INSERT INTO assets
 (asset_tag, name, category)
