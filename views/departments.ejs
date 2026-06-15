@@ -1,1 +1,50 @@
-<h1>Department</h1>
+<div class="page-header">
+    <h1>Departments</h1>
+</div>
+
+<div class="department-grid">
+
+    <% departments.forEach(department => { %>
+
+        <div class="department-card">
+
+            <div class="department-name">
+                <%= department.name %>
+            </div>
+
+            <div class="department-stats">
+
+                <div class="stat-box">
+                    <span class="stat-number">
+                        <%= department.employee_count %>
+                    </span>
+                    <span class="stat-label">
+                        Employees
+                    </span>
+                </div>
+
+                <div class="stat-box">
+                    <span class="stat-number">
+                        <%= department.assigned_assets %>
+                    </span>
+                    <span class="stat-label">
+                        Assets
+                    </span>
+                </div>
+
+                <div class="stat-box">
+                    <span class="stat-number">
+                        <%= department.request_count %>
+                    </span>
+                    <span class="stat-label">
+                        Requests
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    <% }) %>
+
+</div>
