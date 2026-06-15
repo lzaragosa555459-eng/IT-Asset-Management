@@ -6,7 +6,11 @@ CREATE TABLE departments (
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    role TEXT,
+    employee_id INTEGER,
+    FOREIGN KEY(employee_id)
+        REFERENCES employees(id)
 ); 
 
 CREATE TABLE requests (
@@ -15,7 +19,7 @@ CREATE TABLE requests (
     asset_id INTEGER,
     request_date DATE,
     reason TEXT,
-    status TEXT DEFAULT 'Pending'
+    status TEXT DEFAULT 'Pending',
     approved_by INTEGER,
     approved_date DATE,
     FOREIGN KEY(employee_id)
