@@ -49,7 +49,7 @@ it-asset-management/
 
 ## Goals:
 
-- ✅ Authentication working
+- ⏳ Authentication working
 
 - ✅ Layouts fixed
 
