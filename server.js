@@ -9,6 +9,7 @@ const loginRoutes = require("./routes/loginRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const assetRoutes = require("./routes/assetRoutes");
 const assignmentRoutes = require("./routes/assignmentRoutes");
+const departmentRoutes = require("./routes/departmentRoutes")
 
 // 1. middleware (BODY PARSER)
 app.use(express.urlencoded({ extended: true }));
@@ -27,6 +28,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", loginRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/users", userRoutes);
+app.use("/departments", departmentRoutes);
 app.use("/assets", assetRoutes);
 app.use("/assignments", assignmentRoutes);
 
