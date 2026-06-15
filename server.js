@@ -4,7 +4,7 @@ const path = require("path");
 const expressLayouts = require("express-ejs-layouts");
 
 // routes
-const employeeRoutes = require("./routes/employeeRoutes");
+const userRoutes = require("./routes/userRoutes");
 const loginRoutes = require("./routes/loginRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const assetRoutes = require("./routes/assetRoutes");
@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // 4. routes
 app.use("/", loginRoutes);
 app.use("/dashboard", dashboardRoutes);
-app.use("/employees", employeeRoutes);
+app.use("/users", userRoutes);
 app.use("/assets", assetRoutes);
 app.use("/assignments", assignmentRoutes);
 
