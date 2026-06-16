@@ -10,7 +10,14 @@ exports.index = (req, res) => {
             return res.status(500).send("DB Error");
         }
 
-        db.all("SELECT * FROM assets", [], (err, assets) => {
+        db.all(
+            `
+            SELECT *
+            FROM assets
+            WHERE status = 'Available'
+            `,
+            [],
+            (err, assets) => {
 
             if (err) {
                 console.error(err);
@@ -49,5 +56,111 @@ exports.index = (req, res) => {
         });
 
     });
+
+};
+
+exports.store = (req, res) => {
+
+    const {
+        employee_id,
+        asset_id
+    } = req.body;
+
+    db.run(
+        `
+        INSERT INTO assignments
+        (
+            employee_id,
+            asset_id,
+            assigned_date
+        )
+        VALUES (?, ?, DATE('now'))
+        `,
+        [
+            employee_id,
+            asset_id
+        ],
+        function(err) {
+
+            if (err) {
+                console.log(err);
+                return res.send(err.message);
+            }
+
+            db.run(
+                `
+                UPDATE assets
+                SET status = 'Assigned'
+                WHERE id = ?
+                `,
+                [asset_id],
+                (err) => {
+
+                    if (err) {
+                        console.log(err);
+                    }
+
+                    res.redirect("/assignments");
+                }
+            );
+
+        }
+    );
+
+};
+
+exports.returnAsset = (req, res) => {
+
+    db.get(
+        `
+        SELECT asset_id
+        FROM assignments
+        WHERE id = ?
+        `,
+        [req.params.id],
+        (err, assignment) => {
+
+            if (err) {
+                console.log(err);
+                return res.send(err.message);
+            }
+
+            db.run(
+                `
+                UPDATE assignments
+                SET returned_date = DATE('now')
+                WHERE id = ?
+                `,
+                [req.params.id],
+                (err) => {
+
+                    if (err) {
+                        console.log(err);
+                        return res.send(err.message);
+                    }
+
+                    db.run(
+                        `
+                        UPDATE assets
+                        SET status = 'Available'
+                        WHERE id = ?
+                        `,
+                        [assignment.asset_id],
+                        (err) => {
+
+                            if (err) {
+                                console.log(err);
+                            }
+
+                            res.redirect("/assignments");
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+    );
 
 };

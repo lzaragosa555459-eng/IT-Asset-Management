@@ -57,41 +57,56 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <% if (assignments && assignments.length > 0) { %>
-                            <% assignments.forEach(assign => { %>
+                        <tbody>
+                            <% if (assignments && assignments.length > 0) { %>
+
+                                <% assignments.forEach(assign => { %>
+
+                                    <tr>
+                                        <td><%= assign.id %></td>
+                                        <td><%= assign.employee_name %></td>
+                                        <td><%= assign.asset_name %></td>
+                                        <td><%= assign.assigned_date %></td>
+
+                                        <td>
+                                            <% if (assign.returned_date) { %>
+                                                <span class="returned-badge">
+                                                    ✓ Returned
+                                                </span>
+                                            <% } else { %>
+                                                <span class="not-returned-badge">
+                                                    ⚡ Active
+                                                </span>
+                                            <% } %>
+                                        </td>
+
+                                        <td class="action-btns">
+                                            <% if (!assign.returned_date) { %>
+                                                <button
+                                                    class="btn-return"
+                                                    onclick="returnAsset(<%= assign.id %>)">
+                                                    ↩ Return
+                                                </button>
+                                            <% } else { %>
+                                                <span style="color:#9ca3af;font-size:.7rem">
+                                                    Completed
+                                                </span>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+
+                                <% }) %>
+
+                            <% } else { %>
+
                                 <tr>
-                                    <td><%= assign.id %></td>
-                                    <td><%= assign.employee_name %></td>
-                                    <td><%= assign.asset_name %></td>
-                                    <td><%= assign.assigned_date %></td>
-                                    <td>
-                                        <% if (assign.returned_date) { %>
-                                            <span class="returned-badge">✓ Returned</span>
-                                        <% } else { %>
-                                            <span class="not-returned-badge">⚡ Active</span>
-                                        <% } %>
+                                    <td colspan="6" class="empty-assignments">
+                                        No assignments found.
                                     </td>
-                                    <td class="action-btns">
-                                        <% if (!assign.returned_date) { %>
-                                            <button class="btn-return" onclick="returnAsset(<%= assign.id %>)">
-                                                ↩ Return
-                                            </button>
-                                        <% } else { %>
-                                            <span style="color: #9ca3af; font-size: 0.7rem;">Completed</span>
-                                        <% } %>
-                                    </td>
-                                </table>
-                            <% }) %>
-                        <% } else { %>
-                            <tr>
-                                <td colspan="6" class="empty-assignments">
-                                    <i>📭</i>
-                                    No assignments found.
-                                </td>
-                            </tr>
-                        <% } %>
-                    </tbody>
+                                </tr>
+
+                            <% } %>
+                        </tbody>
                 </table>
             </div>
         </div>
