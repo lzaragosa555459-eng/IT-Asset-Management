@@ -1,0 +1,65 @@
+<h1>Edit User</h1>
+
+<form action="/users/update/<%= user.id %>" method="POST">
+
+    <div>
+        <label>Username</label>
+
+        <input
+            type="text"
+            name="username"
+            value="<%= user.username %>"
+            required>
+    </div>
+
+    <div>
+        <label>Role</label>
+
+        <select name="role">
+
+            <option value="Admin"
+                <%= user.role === "Admin" ? "selected" : "" %>>
+                Admin
+            </option>
+
+            <option value="IT Staff"
+                <%= user.role === "IT Staff" ? "selected" : "" %>>
+                IT Staff
+            </option>
+
+            <option value="Employee"
+                <%= user.role === "Employee" ? "selected" : "" %>>
+                Employee
+            </option>
+
+        </select>
+    </div>
+
+    <div>
+        <label>Employee</label>
+
+        <select name="employee_id">
+
+            <option value="">
+                -- Select Employee --
+            </option>
+
+            <% employees.forEach(employee => { %>
+
+                <option
+                    value="<%= employee.id %>"
+                    <%= user.employee_id == employee.id ? "selected" : "" %>>
+                    <%= employee.employee_id %> -
+                    <%= employee.name %>
+                </option>
+
+            <% }) %>
+
+        </select>
+    </div>
+
+    <button type="submit">
+        Update User
+    </button>
+
+</form>

@@ -4,8 +4,13 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 
 router.get("/", userController.index);
-router.post("/", userController.store);
-router.put("/:id", userController.update);
-router.delete("/:id", userController.destroy);
+
+router.get("/add", userController.create);
+router.post("/store", userController.store);
+
+router.get("/edit/:id", userController.edit);
+router.post("/update/:id", userController.update);
+
+router.get("/delete/:id", userController.destroy);
 
 module.exports = router;
