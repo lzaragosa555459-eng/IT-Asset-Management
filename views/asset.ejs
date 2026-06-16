@@ -74,12 +74,12 @@
     </table>
 </div>
 
-<!-- Mobile Card View -->
-<div class="assets-grid" id="assetsGrid"></div>
+<!-- Mobile Card View 
+<div class="assets-grid" id="assetsGrid"></div>-->
 
 <script>
     // Store assets data for filtering
-    let allAssets = <%= JSON.stringify(assets) %>;
+    let allAssets = <%- JSON.stringify(assets) %>;
     
     // Function to update status badge class
     function getStatusClass(status) {
@@ -135,7 +135,7 @@
                 <td>${asset.id}</td>
                 <td>${asset.asset_tag}</td>
                 <td>${asset.name}</td>
-                <td>${asset.category}</td>
+                <td>${asset.category_name || '-'}</td>
                 <td>${asset.brand}</td>
                 <td><span class="status-badge ${getStatusClass(asset.status)}">${asset.status}</span></td>
                 <td class="action-btns">
@@ -158,7 +158,9 @@
                 </div>
                 <div class="asset-detail">
                     <span class="asset-detail-label">Category:</span>
-                    <span class="asset-detail-value">${asset.category}</span>
+                    <span class="asset-detail-value">
+                        ${asset.category_name || '-'}
+                    </span>
                 </div>
                 <div class="asset-detail">
                     <span class="asset-detail-label">Brand:</span>
@@ -189,7 +191,9 @@
                 (asset.brand && asset.brand.toLowerCase().includes(searchTerm));
             
             const matchesStatus = statusFilter === '' || asset.status === statusFilter;
-            const matchesCategory = categoryFilter === '' || asset.category === categoryFilter;
+            const matchesCategory =
+                categoryFilter === '' ||
+                asset.category_name?.toLowerCase() === categoryFilter;
             
             return matchesSearch && matchesStatus && matchesCategory;
         });

@@ -1,20 +1,21 @@
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./database.db');
+const db = require("../config/database");
 
 exports.index = (req, res) => {
 
-    db.all(`
+    const sql = `
         SELECT
             assets.*,
             categories.name AS category_name
         FROM assets
         LEFT JOIN categories
             ON assets.category_id = categories.id
-    `, [], (err, assets) => {
+    `;
+
+    db.all(sql, [], (err, assets) => {
 
         if (err) {
-            console.error(err);
-            return res.status(500).send("DB Error");
+            console.log(err);
+            return res.send("Database Error");
         }
 
         res.render("asset", {
@@ -24,5 +25,172 @@ exports.index = (req, res) => {
         });
 
     });
+
+};
+
+
+exports.create = (req, res) => {
+
+    db.all(
+        `SELECT * FROM categories`,
+        [],
+        (err, categories) => {
+
+            if (err) {
+                console.log(err);
+                return res.send("Database Error");
+            }
+
+            res.render("assets/add", {
+                title: "Add Asset",
+                layout: "layouts/main",
+                categories
+            });
+
+        }
+    );
+
+};
+
+exports.store = (req, res) => {
+
+    const {
+        asset_tag,
+        name,
+        category_id,
+        brand,
+        status
+    } = req.body;
+
+    db.run(
+        `
+        INSERT INTO assets
+        (
+            asset_tag,
+            name,
+            category_id,
+            brand,
+            status
+        )
+        VALUES (?, ?, ?, ?, ?)
+        `,
+        [
+            asset_tag,
+            name,
+            category_id,
+            brand,
+            status
+        ],
+        (err) => {
+
+            if (err) {
+                console.log(err);
+                return res.send(err.message);
+            }
+
+            res.redirect("/assets");
+
+        }
+    );
+
+};
+
+exports.edit = (req, res) => {
+
+    db.get(
+        `SELECT * FROM assets WHERE id = ?`,
+        [req.params.id],
+        (err, asset) => {
+
+            if (err) {
+                console.log(err);
+                return res.send("Database Error");
+            }
+
+            db.all(
+                `SELECT * FROM categories`,
+                [],
+                (err, categories) => {
+
+                    if (err) {
+                        console.log(err);
+                        return res.send("Database Error");
+                    }
+
+                    res.render("assets/edit", {
+                        title: "Edit Asset",
+                        layout: "layouts/main",
+                        asset,
+                        categories
+                    });
+
+                }
+            );
+
+        }
+    );
+
+};
+
+exports.update = (req, res) => {
+
+    const {
+        asset_tag,
+        name,
+        category_id,
+        brand,
+        status
+    } = req.body;
+
+    db.run(
+        `
+        UPDATE assets
+        SET
+            asset_tag = ?,
+            name = ?,
+            category_id = ?,
+            brand = ?,
+            status = ?
+        WHERE id = ?
+        `,
+        [
+            asset_tag,
+            name,
+            category_id,
+            brand,
+            status,
+            req.params.id
+        ],
+        (err) => {
+
+            if (err) {
+                console.log(err);
+                return res.send(err.message);
+            }
+
+            res.redirect("/assets");
+
+        }
+    );
+
+};
+
+
+exports.destroy = (req, res) => {
+
+    db.run(
+        `DELETE FROM assets WHERE id = ?`,
+        [req.params.id],
+        (err) => {
+
+            if (err) {
+                console.log(err);
+                return res.send(err.message);
+            }
+
+            res.redirect("/assets");
+
+        }
+    );
 
 };
